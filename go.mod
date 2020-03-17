@@ -1,3 +1,3 @@
 module github.com/freshman-tech/news-demo
 
-go 1.12.9
+go 1.14
