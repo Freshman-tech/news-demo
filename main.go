@@ -81,7 +81,7 @@ func searchHandler(newsapi *news.Client) http.HandlerFunc {
 		search := &Search{
 			Query:      searchQuery,
 			NextPage:   nextPage,
-			TotalPages: int(math.Ceil(float64(results.TotalResults / newsapi.PageSize))),
+			TotalPages: int(math.Ceil(float64(results.TotalResults) / float64(newsapi.PageSize))),
 			Results:    results,
 		}
 
