@@ -23,7 +23,7 @@ free API key.
 - Clone this repository to your filesystem.
 
 ```bash
-$ git clone https://github.com/Freshman-tech/news-demo
+$ git clone https://github.com/sm43/news-demo
 ```
 
 - Rename the `.env.example` file to `.env` and enter your News API Key.
