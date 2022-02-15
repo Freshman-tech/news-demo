@@ -101,10 +101,10 @@ func searchHandler(newsapi *news.Client) http.HandlerFunc {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("Error loading .env file")
-	}
+	_ = godotenv.Load()
+	//if err != nil {
+	//	log.Println("Error loading .env file")
+	//}
 
 	port := os.Getenv("PORT")
 	if port == "" {
