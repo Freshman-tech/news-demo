@@ -48,7 +48,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	buf.WriteTo(w)
+	_, _ = buf.WriteTo(w)
 }
 
 func searchHandler(newsapi *news.Client) http.HandlerFunc {
@@ -96,7 +96,7 @@ func searchHandler(newsapi *news.Client) http.HandlerFunc {
 			return
 		}
 
-		buf.WriteTo(w)
+		_, _ = buf.WriteTo(w)
 	}
 }
 
@@ -125,5 +125,5 @@ func main() {
 	mux.Handle("/assets/", http.StripPrefix("/assets/", fs))
 	mux.HandleFunc("/search", searchHandler(newsapi))
 	mux.HandleFunc("/", indexHandler)
-	http.ListenAndServe(":"+port, mux)
+	_ = http.ListenAndServe(":"+port, mux)
 }
