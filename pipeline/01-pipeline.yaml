@@ -1,0 +1,115 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: news-demo-deploy
+spec:
+  params:
+    - name: REPO
+    - name: REVISION
+    - name: IMAGE
+    - name: TAG
+    - name: NAMESPACE
+  workspaces:
+    - name: shared-workspace
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      params:
+        - name: url
+          value: $(params.REPO)
+        - name: subdirectory
+          value: ""
+        - name: deleteExisting
+          value: "true"
+        - name: revision
+          value: $(params.REVISION)
+    - name: build-test
+      runAfter:
+        - fetch-repository
+      taskRef:
+        name: golang-build
+      params:
+        - name: packages
+          value: ./...
+        - name: package
+          value: github.com/sm43/news-demo
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: unit-tests
+      runAfter:
+        - fetch-repository
+      taskRef:
+        name: golang-test
+      params:
+        - name: package
+          value: github.com/sm43/news-demo
+        - name: flags
+          value: -v -mod=vendor
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+    - name: build-push-image
+      taskRef:
+        name: buildah
+      workspaces:
+        - name: source
+          workspace: shared-workspace
+      params:
+        - name: IMAGE
+          value: $(params.IMAGE):$(params.TAG)
+        - name: FORMAT
+          value: "docker"
+      runAfter:
+        - build-test
+        - unit-tests
+    - name: check-deployment
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl describe deployment news-demo -n "$(params.NAMESPACE)" >/dev/null 2>/dev/null
+            if [[ $? -eq 0 ]]; then
+              printf yes | tee /tekton/results/output-result
+            else
+              printf no | tee /tekton/results/output-result
+            fi
+      runAfter:
+        - build-push-image
+    - name: patch-image
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl patch deployment news-demo --patch='{"spec":{"template":{"spec":{
+              "containers":[{
+                "name": "news-demo",
+                "image": "$(params.IMAGE):$(params.TAG)"
+              }]
+            }}}}' -n $(params.NAMESPACE)
+      when:
+        - input: "$(tasks.check-deployment.results.output-result)"
+          operator: in
+          values: ["yes"]
+      runAfter:
+        - check-deployment
+    - name: create-deployment
+      taskRef:
+        name: kubernetes-actions
+      workspaces:
+        - name: manifest-dir
+          workspace: shared-workspace
+      params:
+        - name: script
+          value: |
+            kubectl -n $(params.NAMESPACE) apply -f <(sed "s@image:.*@image: $(params.IMAGE):$(params.TAG)@" k8s/02-deployment.yaml)
+      when:
+        - input: "$(tasks.check-deployment.results.output-result)"
+          operator: in
+          values: ["no"]
