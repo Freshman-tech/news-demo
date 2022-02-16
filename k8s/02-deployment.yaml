@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: news-demo
+  namespace: news-demo
+  labels:
+    app: news-demo
+spec:
+  selector:
+    matchLabels:
+      app: news-demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: news-demo
+    spec:
+      containers:
+        - name: news-demo
+          image: quay.io/sm43/news-demo:latest
+          ports:
+            - containerPort: 3000
+          env:
+          - name: NEWS_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: news-demo
+                key: NEWS_API_KEY
+

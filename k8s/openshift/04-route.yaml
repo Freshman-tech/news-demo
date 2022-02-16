@@ -1,0 +1,15 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: news-demo
+  namespace: news-demo
+  labels:
+    app: news-demo
+spec:
+  to:
+    kind: Service
+    name: news-demo
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge

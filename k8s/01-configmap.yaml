@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: news-demo
+  namespace: news-demo
+  labels:
+    app: news-demo
+data:
+  NEWS_API_KEY: <>
