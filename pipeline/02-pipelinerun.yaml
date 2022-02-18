@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   generateName: news-demo-deploy-
+  namespace: news-demo
 spec:
   serviceAccountName: news-demo
   params:

@@ -1,0 +1,41 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: news-demo-template
+  namespace: news-demo
+spec:
+  params:
+    - name: gitrevision
+    - name: gitrepositoryurl
+    - name: pullreq-number
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: news-demo-deploy-
+        namespace: news-demo
+      spec:
+        serviceAccountName: news-demo
+        params:
+          - name: REPO
+            value: $(tt.params.gitrepositoryurl)
+          - name: REVISION
+            value: $(tt.params.gitrevision)
+          - name: IMAGE
+            value: "quay.io/sm43/news-demo"
+          - name: TAG
+            value: $(tt.params.pullreq-number)
+          - name: NAMESPACE
+            value: "news-demo"
+        pipelineRef:
+          name: news-demo-deploy
+        workspaces:
+          - name: shared-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi

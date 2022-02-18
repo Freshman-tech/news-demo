@@ -1,0 +1,15 @@
+---
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: news-demo-pr-binding
+  namespace: news-demo
+spec:
+  params:
+    - name: gitrevision
+      value: $(body.pull_request.head.sha)
+    - name: gitrepositoryurl
+      value: $(body.repository.clone_url)
+    - name: pullreq-number
+      value: $(body.number)
+

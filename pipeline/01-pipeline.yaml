@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: news-demo-deploy
+  namespace: news-demo
 spec:
   params:
     - name: REPO
