@@ -7,9 +7,8 @@ metadata:
 spec:
   params:
     - name: gitrevision
-      value: $(body.pull_request.head.sha)
+      value: $(body.head_commit.id)
     - name: gitrepositoryurl
-      value: $(body.repository.clone_url)
-    - name: pullreq-number
-      value: $(body.number)
-
+      value: $(body.repository.url)
+    - name: createdat
+      value: $(body.repository.created_at)

@@ -8,7 +8,7 @@ spec:
   params:
     - name: gitrevision
     - name: gitrepositoryurl
-    - name: pullreq-number
+    - name: createdat
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -25,7 +25,7 @@ spec:
           - name: IMAGE
             value: "quay.io/sm43/news-demo"
           - name: TAG
-            value: $(tt.params.pullreq-number)
+            value: $(tt.params.createdat)
           - name: NAMESPACE
             value: "news-demo"
         pipelineRef:

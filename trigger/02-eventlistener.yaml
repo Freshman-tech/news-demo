@@ -12,7 +12,7 @@ spec:
             name: "github"
           params:
             - name: "eventTypes"
-              value: ["pull_request"]
+              value: ["push"]
       bindings:
         - ref: news-demo-pr-binding
       template:

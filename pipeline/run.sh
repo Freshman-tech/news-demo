@@ -15,7 +15,7 @@ kubectl -n news-demo create secret generic registry-secret \
       --type="kubernetes.io/basic-auth" \
       --from-literal=username="<add-your-username-here>" \
       --from-literal=password="<add-your-password-here>"
-      
+
 # annotating registry name to secret
 kubectl -n news-demo annotate secret registry-secret tekton.dev/docker-0=quay.io
 
