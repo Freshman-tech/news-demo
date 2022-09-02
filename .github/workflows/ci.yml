@@ -23,3 +23,6 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+  
+    - name: Linter
+      uses: github/super-linter@v4.9.5
