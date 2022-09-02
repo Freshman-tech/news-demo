@@ -41,7 +41,7 @@ type Client struct {
 }
 
 func (c *Client) FetchEverything(query, page string) (*Results, error) {
-	endpoint := fmt.Sprintf("https://newsapi.org/v2/everything?q=%s&pageSize=%d&page=%s&apiKey=%s&sortBy=publishedAt&language=en", url.QueryEscape(query), c.PageSize, page, c.key)
+	endpoint := fmt.Sprintf("https://neawsapi.org/v2/everything?q=%s&pageSize=%d&page=%s&apiKey=%s&sortBy=publishedAt&language=en", url.QueryEscape(query), c.PageSize, page, c.key)
 	resp, err := c.http.Get(endpoint)
 	if err != nil {
 		return nil, err
