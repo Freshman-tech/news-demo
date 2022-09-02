@@ -1,4 +1,4 @@
-# News Application Demo (^.^)
+# News Application Demo
 
 This news application is a fork of [Freshman-tech/news-demo](https://github.com/Freshman-tech/news-demo) and updated to be containerised
 and used with CI/CD solutions.
