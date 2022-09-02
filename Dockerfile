@@ -1,10 +1,17 @@
-FROM golang:1.15-alpine3.14 AS builder
+FROM golang:1.18 AS builder
 
-WORKDIR /go/src/github.com/sm43/news-demo
+WORKDIR /go/src/app
 COPY . .
 
-RUN go build -o news-demo .
+RUN go mod download
+RUN CGO_ENABLED=0 go build -o /go/bin/news-demo
+
+FROM gcr.io/distroless/static-debian11
+
+COPY --from=builder /go/bin/news-demo /
+COPY --from=builder /go/src/app/index.html /
+COPY --from=builder /go/src/app/assets/ /
 
 EXPOSE 3000
 
-CMD [ "/go/src/github.com/sm43/news-demo/news-demo" ]
+CMD ["/news-demo"]
