@@ -1,6 +1,7 @@
 # News Application Demo (^.^)
 
-Learn how to develop web applications with Go by building a News application.
+This news application is a fork of [Freshman-tech/news-demo](https://github.com/Freshman-tech/news-demo) and updated to be containerised
+and used with CI/CD solutions.
 
 Here's what the [completed application](https://freshman-news.herokuapp.com/)
 looks like:
